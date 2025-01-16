@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>task 4 </h1>
+    <h2>
+        Задача 4. “Рахунок у банку”
+        Вимоги:
+        1 Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або зняттям.
+
+        2 Сума автоматично переводиться у долари та євро (фіксований курс задається у data).
+
+        3 можливість зарахувати суму (контролювати, щоб не була від’ємною)
+
+        4 можливість зняти (щоб не можна зняти більше ніж є на рахунку)
+
+        5 при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків автоматично)
+
+        При зміні суми :
+        - якщо було зняття, то суму відоражати червоним
+        - якщо було зарахування, то суму відображати зеленим
+        Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим
+
+    </h2>
+
+    <div id="app">
+        <div class="balance" :class="balanceClass">баланс {{balance}}</div>
+        <div>зарахувати на рахунок <input type="number" v-model.number="addToBalanceValue"> <button @click="addMoney">Зарахувати</button></div>
+        <div>Зняти з рахунку <input type="number" v-model.number="withdrawToBalanceValue"> <button @click="withdrawMoney">Зняти</button></div>
+        <div>Комісія за обслуговуввання: {{getFee}}</div>
+
+        <hr>
+        <div :class="dollarCalculate < 100 ? 'red' : 'green'">Сума в Доларах: {{dollarCalculate}}</div>
+        <div :class="euroCalculate < 100 ? 'red' : 'green'">Сума в Євро: {{euroCalculate}}</div>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+        createApp({
+            data() {
+                return {
+                    balance: 0,
+                    addToBalanceValue: null,
+                    withdrawToBalanceValue: null,
+                    dollarRate: 43,
+                    euroRate: 45,
+                    fee: 3,
+                    lastAction: null
+                }
+            },
+            methods: {
+                addMoney() {
+                    if (this.balance + this.addToBalanceValue >= 0) {
+                        this.balance += this.addToBalanceValue
+                        this.lastAction = 'add';
+
+                    }
+                    this.addToBalanceValue = null
+                },
+                withdrawMoney() {
+                    if (this.balance >= this.withdrawToBalanceValue) {
+                        this.balance -= this.withdrawToBalanceValue
+                        this.lastAction = 'withdraw';
+
+                    }
+
+                    this.withdrawToBalanceValue = null
+                },
+
+            },
+            computed: {
+                balanceClass() {
+                    if (this.lastAction === 'add') {
+                        return 'green';
+                    } else if (this.lastAction === 'withdraw') {
+                        return 'red';
+                    }
+
+                    return '';
+                },
+
+                dollarCalculate() {
+                    return (this.balance / this.dollarRate).toFixed(2)
+
+                },
+                euroCalculate() {
+                    return (this.balance / this.euroRate).toFixed(2)
+                },
+                getFee() {
+                    return this.balance * this.fee / 100
+                },
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

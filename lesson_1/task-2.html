@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h2>
+        Задача 2. Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….).
+        Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).
+    </h2>
+</body>
+<div id="app">
+    <input type="text" v-model="monthNum" placeholder="please enter month number">
+
+    <div>Пора року- {{seasonValue}}</div>
+    <div>Рекомендований одяг- {{renderClothing}}</div>
+    <div><img :src="renderImage"></div>
+</div>
+
+<script>
+    const configData = {
+        winter: {
+            clothing: 'Пальто',
+            imageUrl: 'https://www.volynnews.com/files/news/2021/08-31/321703/winter.jpg'
+        },
+        spring: {
+            clothing: 'штани, сфетр',
+            imageUrl: 'https://cdn.pixabay.com/photo/2014/12/04/14/46/magnolia-trees-556718_1280.jpg'
+        },
+        summer: {
+            clothing: 'Футболка шорти',
+            imageUrl: 'https://media.slovoidilo.ua/media/publications/9/88268/88268-1_large.jpg'
+        },
+        autumn: {
+            clothing: 'Куртка',
+            imageUrl: 'https://i.pinimg.com/736x/c2/14/b1/c214b13147eb040d880be89b759cf151.jpg'
+        },
+    }
+
+    const { createApp } = Vue
+    createApp({
+        data() {
+            return {
+                monthNum: null
+            }
+        },
+        computed: {
+            seasonValue() {
+                if (this.monthNum >= 1 && this.monthNum <= 2 || this.monthNum == 12) {
+                    return 'winter';
+                } else if (this.monthNum >= 3 && this.monthNum <= 5) {
+                    return 'spring';
+                } else if (this.monthNum >= 6 && this.monthNum <= 8) {
+                    return 'summer';
+                } else if (this.monthNum >= 9 && this.monthNum <= 11) {
+                    return 'autumn';
+                } else {
+                    return 'Невірний номер місяця';
+                }
+            },
+            renderImage() {
+                const season = this.seasonValue
+                return configData[season] ? configData[season].imageUrl : '';
+            },
+            renderClothing() {
+                const season = this.seasonValue
+                return configData[season] ? configData[season].clothing : '';
+            }
+
+        }
+    }).mount("#app")
+</script>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h1>task 5 </h1>
+    <h2>
+        Задача 5. Додаток містить масив об’єктів (логін, пароль) -- інсуючі логіни і паролі.
+        Користувач вводить логін і пароль, а програма повідомляє чи може користувач бути авторизованим
+        (чи є він одним з масиву).
+    </h2>
+    <h2> const usersData = [{ login: '123', password: '123' }, { login: '111', password: '111' }, { login: '222', password: '222' }, { login: '333', password: '333' }]</h2>
+    <div id="app">
+
+        <div>
+            <span>Введіть логін</span>
+            <input type="text" v-model="login">
+        </div>
+        <div>
+            <span>Введіть пароль</span>
+            <input type="password" v-model="password">
+        </div>
+
+
+        <div><button @click="verify">go </button></div>
+
+
+        <div> {{message}} </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+        const usersData = [{ login: '123', password: '123' }, { login: '111', password: '111' }, { login: '222', password: '222' }, { login: '333', password: '333' }]
+        createApp({
+            data() {
+                return {
+                    message: null,
+                    login: null,
+                    password: null,
+                }
+            },
+            methods: {
+                verify() {
+                    if (this.password && this.password) {
+                        const user = usersData.find(user => user.login === this.login && user.password === this.password)
+                        if (user)
+                            this.message = 'ви авторизовані'
+                        else {
+                            this.message = 'Коритсувача не знайдено'
+                        }
+                    } else {
+                        this.message = 'заповніть всів поля'
+                    }
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
