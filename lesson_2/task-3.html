@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .item__image img {
+            max-width: 300px;
+        }
+
+        .correct {
+            border: 2px solid green;
+        }
+
+        .incorrect {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>task 3</h1>
+    <h2>
+        Задача 3. Елемент тренажера англійської. Виводимо зображення елемента і слово.
+        Користувач вводить відповідь. Якщо вірно – відтворюємо фразу «Добре. Молодець!» (і додаємо зелену рамку до елемента),
+        якщо ні - то відтворюємо фразу «Невірно, спробуйте ще раз» (і додаємо червону рамку).
+    </h2>
+</body>
+
+<div id="app">
+    <div class="items">
+        <div class="item" :class="{'correct': isCorrect(index) === true, 'incorrect': isCorrect(index) === false}" v-for="(wordItem, index) in myWordList" :key="wordItem.id">
+            <div class="item__image">
+                <img :src="wordItem.image" alt="Image">
+            </div>
+            <div class="item__title">{{wordItem.word}}</div>
+            <div class="item__input">
+                <input type="text" placeholder="Введіть переклад" v-model="translations[index]">
+            </div>
+            <div class="item__button">
+                <button type="button" @click="check(index, wordItem.translation)">Перевірити</button>
+            </div>
+            <div class="item__message" v-if="results[index] !== underfind">
+                <p v-if="isCorrect(index) !== null">
+                    {{ isCorrect(index) ? 'Добре. Молодець!' : 'Невірно, спробуйте ще раз' }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const { createApp } = Vue
+    const wordList = [
+        { id: 1, word: 'apple', translation: 'яблуко', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg' },
+        { id: 2, word: 'banana', translation: 'банан', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg' },
+        { id: 3, word: 'cat', translation: 'кіт', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a3/81_INF_DIV_SSI.jpg' },
+        { id: 4, word: 'dog', translation: 'собака', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg' },
+    ];
+
+    createApp({
+        data() {
+            return {
+                translations: [],
+                results: [],
+            };
+        },
+        methods: {
+            check(index, correctTranslation) {
+                this.results[index] = this.translations[index].trim().toLowerCase() === correctTranslation.toLowerCase();
+            },
+            isCorrect(index) {
+                return this.results[index];
+            }
+        },
+        computed: {
+            myWordList() {
+                return wordList;
+            }
+        }
+    }).mount('#app')
+</script>
+
+</html>

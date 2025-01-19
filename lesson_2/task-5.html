@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 5</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .search-result {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px;
+            background-color: grey;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+        }
+
+        .result-card {
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: #4caf50;
+            margin: 0;
+        }
+
+        .result-link {
+            color: #88d4f5;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .result-description {
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        .result-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .result-links a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        .result-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="search-result">
+            <div v-for="result in searchResults" :key="result.id" class="result-card">
+                <h2 class="result-title">{{ result.title }}</h2>
+                <a :href="result.url" class="result-link">{{ result.url }}</a>
+                <p class="result-description">{{ result.description }}</p>
+                <div class="result-links">
+                    <a v-for="link in result.links" :key="link" :href="link.url">{{ link.text }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    searchResults: [
+                        {
+                            id: 1,
+                            title: 'Vue.js',
+                            url: 'https://vuejs.org',
+                            description: 'Welcome to the Vue tutorial! The goal of this tutorial is to quickly give you an experience of what it feels like to work with Vue, right in the browser.',
+                            links: [
+                                { text: 'Creating a Vue Application', url: 'https://vuejs.org/guide/creating-vue-app.html' },
+                                { text: 'Reactivity Fundamentals', url: 'https://vuejs.org/guide/reactivity.html' },
+                                { text: 'Lifecycle Hooks', url: 'https://vuejs.org/guide/lifecycle.html' }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            title: 'MDN Web Docs',
+                            url: 'https://developer.mozilla.org',
+                            description: 'In this article we\'ll look at a bit of Vue background, learn how to install it and create a new project, study the high-level structure of the whole...',
+                            links: [
+                                { text: 'Clearer Vue', url: 'https://developer.mozilla.org/clearer-vue' },
+                                { text: 'Installation', url: 'https://developer.mozilla.org/vue-installation' },
+                                { text: 'Project structure', url: 'https://developer.mozilla.org/vue-project-structure' }
+                            ]
+                        },
+                        {
+                            id: 3,
+                            title: 'W3Schools',
+                            url: 'https://www.w3schools.com',
+                            description: 'This tutorial is specially designed to help you learn Vue as quickly and efficiently as possible. First, you will learn the basics of Vue.',
+                            links: []
+                        },
+                        {
+                            id: 4,
+                            title: 'Vue.js',
+                            url: 'https://v2.vuejs.org',
+                            description: 'The official guide assumes intermediate level knowledge of HTML, CSS, and JavaScript. If you are totally new to frontend development, it might not be the best...',
+                            links: [
+                                { text: 'Quick Start', url: 'https://v2.vuejs.org/quickstart' },
+                                { text: 'Style Guide', url: 'https://v2.vuejs.org/style-guide' },
+                                { text: 'Migration to Vue 2.7', url: 'https://v2.vuejs.org/migration' }
+                            ]
+                        }
+                    ]
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

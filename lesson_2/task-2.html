@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h2>
+        Задача 2. З випадаючого списку вибираємо клас квитка у літаку. Якщо
+        1) бізнес - виводимо елементи для вибору газети та коньяку
+        (якщо вибрано коньяк, то запропонувати закуску (так/ні)), на фоні зображення бізнес кают
+        2) економ – виводимо елементи для вибору типу пива і чипсів, на фоні хмарки.
+
+    </h2>
+</body>
+<div id="app">
+
+    <select v-model="flyTicket">
+        <option value="bisnes">bisnes</option>
+        <option value="econom">econom</option>
+    </select>
+    <div>{{flyTicket}}</div>
+    <div v-if="isBisnesTicketType">
+        <select v-model="bisnesOptions">
+            <option value="magazine">газета</option>
+            <option value="alcogol">коньяк</option>
+        </select>
+        <div v-if="isAlcogolChose">
+            Бажаєте закуску
+            <select>
+                <option value="yes">Так</option>
+                <option value="no">Ні</option>
+            </select>
+        </div>
+        <div>
+
+            <img src="https://onlinetickets.world/upload/image/86565.jpg" alt="Image">
+        </div>
+    </div>
+    <div v-if="isEconomTicketType">
+        <select>
+            <option value="beer">пиво</option>
+            <option value="snacks">чипси</option>
+        </select>
+        <div>
+
+            <img src="https://st4.depositphotos.com/13349494/38153/i/450/depositphotos_381535858-stock-photo-blue-sky-clouds-summertime.jpg" alt="">
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const { createApp } = Vue
+    createApp({
+        data() {
+            return {
+                flyTicket: null,
+                bisnesOptions: null
+            }
+        },
+        computed: {
+            isAlcogolChose() {
+                return this.bisnesOptions == 'alcogol' ? true : false
+            },
+            isBisnesTicketType() {
+                return this.flyTicket == 'bisnes' ? true : false
+            },
+            isEconomTicketType() {
+                return this.flyTicket == 'econom' ? true : false
+            }
+        }
+    }).mount("#app")
+</script>
+
+</html>

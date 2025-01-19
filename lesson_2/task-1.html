@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .blue {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>
+        Задача 1. Вводимо логіна і пароль. Якщо логін вірний відображаємо смайл. Якщо ні, то:
+        1) якщо логін = Іван – колір повідомлення про помилку синій
+        2) якщо хтось інший, то колір повідомлення червоний
+
+    </h4>
+    <div id="app">
+        <input type="text" placeholder="LOGIN" v-model="login">
+        <input type="text" placeholder="password" v-model="password">
+        <button type="button" @click="checkUser">Перевірити </button>
+        <div v-show="isUserValid">смайл :)</div>
+        <div v-show="!isUserValid" :class="messageClass">Не коректні дані</div>
+    </div>
+
+    <script>
+        const userData = {
+            login: '123',
+            password: '123',
+        };
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    login: null,
+                    password: null,
+                    isUserValid: false,
+                    messageClass: '',
+                };
+            },
+            methods: {
+                checkUser() {
+                    if (this.login && this.password) {
+                        if (this.login == userData.login && this.password == userData.password) {
+                            this.isUserValid = true;
+                            this.messageClass = '';
+                        } else {
+                            this.isUserValid = false;
+                            this.messageClass = this.login.toLowerCase() === 'іван' ? 'blue' : 'red';
+                        }
+                    } else {
+                        this.isUserValid = false;
+                        this.messageClass = 'red';
+                    }
+                },
+            },
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 5</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+
+        }
+
+        tbody {
+            vertical-align: top;
+        }
+
+        tbody tr td {
+            width: 30%;
+        }
+
+        table div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>
+
+        Задача 6. Задача. На кухню поступають замовлення. Спочатку ми додаємо їх у список “Очікують на виконання”,
+        якщо повар береться робити — замовлення переходить у список “Виконуються”, якщо замовлення виконано —
+        переходить у список “Готові до виносу”. Якщо натиснути на “Подано” - страва зникає з таблиці
+    </h2>
+    <div id="app">
+        <div>
+            <div>Нова замовленна страва: <input type="text" v-model="newDish"> <button @click="addDish">Додати </button></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Очікують на виконання</th>
+                    <th>Виконуються</th>
+                    <th>Готові до виносу</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="!isAvailibleItems">
+                    <td colspan="3">Немає активних завдань</td>
+                </tr>
+                <tr v-else>
+                    <td>
+                        <div v-for="(item, index) in waitingList" :key="'waiting-' + index">
+                            <span>{{ item }}</span>
+                            <button @click="moveToDeveloping(index)">Готувати</button>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div v-for="(item, index) in processingList" :key="'processing-' + index">
+                            <span>{{ item }}</span>
+                            <button @click="moveToCompleted(index)">Приготовлено</button>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div v-for="(item, index) in completedList" :key="'completed-' + index">
+                            <span>{{ item }}</span>
+                            <button @click="deleteDish(index)">Подано</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    newDish: null,
+                    waitingList: [],
+                    processingList: [],
+                    completedList: [],
+                };
+            },
+            methods: {
+                addDish() {
+                    this.waitingList.push(this.newDish)
+                    this.newDish = null
+                },
+                moveToDeveloping(index) {
+                    const dish = this.waitingList.splice(index, 1)[0];
+                    this.processingList.push(dish);
+                },
+                moveToCompleted(index) {
+                    const dish = this.processingList.splice(index, 1)[0];
+                    this.completedList.push(dish);
+                },
+                deleteDish(index) {
+                    const dish = this.completedList.splice(index, 1)[0];
+                }
+            },
+            computed: {
+                isAvailibleItems() {
+                    if (this.waitingList.length || this.processingList.length || this.completedList.length) return true
+                    return false
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
