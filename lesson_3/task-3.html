@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажер додавання</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h4 {
+            color: #2c3e50;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .result-list {
+            margin-top: 20px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>
+        Задача 13. Тренажер додавання. Вводимо загальну кількість прикладів і натискаємо на кнопку «Старт». Після запуску (натисканні на кнопку «Старт») кожні 10 секунд (10 секунд між завданнями) користувачу задають випадковий приклад з додавання двох цифр і робиться перевірка. Формується список тих, які він відповів правильно, і які він відповів неправильно. Загальна кількість прикладів вводиться.
+    </h4>
+
+    <div id="app">
+        <div v-if="showFirstScene">
+            <h2>Введіть кількість прикладів</h2>
+            <input type="number" v-model.lazy.number="examplesCount" min="1">
+            <button @click="start">Старт</button>
+        </div>
+
+        <div v-else-if="isStartedTraining">
+            <h2>Приклад {{ currentExampleIndex + 1 }} із {{ examplesCount }}</h2>
+            <div style="font-size: 24px; margin: 20px 0;">
+                {{ currentExample.a }} + {{ currentExample.b }} =
+                <input type="number" v-model.lazy.number="userAnswer">
+            </div>
+            <button @click="checkAnswer">Відповісти</button>
+        </div>
+
+        <div v-else-if="isStartedCompleted">
+            <h2>Результати</h2>
+            <div class="result-list">
+                <h3>Правильні відповіді:</h3>
+                <ul>
+                    <li v-for="item in trueAnswers" :key="item" class="correct">{{ item }}</li>
+                </ul>
+
+                <h3>Неправильні відповіді:</h3>
+                <ul>
+                    <li v-for="item in falseAnswers" :key="item" class="incorrect">{{ item }}</li>
+                </ul>
+            </div>
+            <button @click="reset">Спробувати знову</button>
+        </div>
+    </div>
+
+    <script>
+        const fromNumber = 0;
+        const toNumber = 15;
+        const delay = 10000;
+
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    examplesCount: null,
+                    showFirstScene: true,
+                    isStartedTraining: false,
+                    isStartedCompleted: false,
+                    userAnswer: null,
+                    trueAnswers: [],
+                    falseAnswers: [],
+                    currentExampleIndex: 0,
+                    currentExample: null,
+                    timer: null,
+                };
+            },
+            methods: {
+                start() {
+                    if (this.examplesCount > 0) {
+                        this.showFirstScene = false;
+                        this.isStartedTraining = true;
+                        this.isStartedCompleted = false;
+                        this.currentExampleIndex = 0;
+                        this.trueAnswers = [];
+                        this.falseAnswers = [];
+                        this.generateNextExample();
+                    }
+                },
+                getRandomNumber(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                },
+                generateExample() {
+                    return {
+                        a: this.getRandomNumber(fromNumber, toNumber),
+                        b: this.getRandomNumber(fromNumber, toNumber),
+                    };
+                },
+                generateNextExample() {
+                    if (this.currentExampleIndex < this.examplesCount) {
+                        this.currentExample = this.generateExample();
+                        this.userAnswer = null;
+                        this.timer = setTimeout(this.timeUp, delay);
+                    } else {
+                        this.finishTraining();
+                    }
+                },
+                checkAnswer() {
+                    clearTimeout(this.timer);
+                    const correctAnswer = this.currentExample.a + this.currentExample.b;
+                    if (this.userAnswer === correctAnswer) {
+                        this.trueAnswers.push(`${this.currentExample.a} + ${this.currentExample.b} = ${this.userAnswer}`);
+                    } else {
+                        this.falseAnswers.push(`${this.currentExample.a} + ${this.currentExample.b} = ${this.userAnswer} (правильна відповідь: ${correctAnswer})`);
+                    }
+                    this.currentExampleIndex++;
+                    this.generateNextExample();
+                },
+                timeUp() {
+                    this.falseAnswers.push(`${this.currentExample.a} + ${this.currentExample.b} = не відповів (правильна відповідь: ${this.currentExample.a + this.currentExample.b})`);
+                    this.currentExampleIndex++;
+                    this.generateNextExample();
+                },
+                finishTraining() {
+                    this.isStartedTraining = false;
+                    this.isStartedCompleted = true;
+                },
+                reset() {
+                    this.showFirstScene = true;
+                    this.isStartedTraining = false;
+                    this.isStartedCompleted = false;
+                    this.examplesCount = null;
+                },
+            },
+        }).mount("#app");
+    </script>
+
+</body>
+
+</html>

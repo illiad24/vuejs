@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .column {
+            padding: 12px;
+            border: 1px solid blue;
+            margin-bottom: 12px;
+        }
+
+        .column li {
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+
+        .selected {
+            border: 2px solid blue !important;
+        }
+
+        .incorrect {
+            border: 2px solid red !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>
+        Задача 9. Перекладач. Користувачу виводять змішані картки з словами на англійській і українській мові.
+        Користувач поступово клікає на картки (виділяємо синьою рамкою).
+        Якщо знайдено правильні пари карток, що відповідають одному слову, то видаляємо ці картки.
+        Інакше - виділяємо червоною рамкою і через секунду забираємо рамку.
+    </h4>
+</body>
+<div id="app">
+    <h2>Знайдіть пари слів</h2>
+    <div class="columns">
+        <div class="column">
+            <ul>
+                <li v-for="(word,index) in words" :key="word.id" @click="selectUaWord(index)" :class="{ selected: selectedUaWord === word.id, incorrect: incorrectPair && selectedUaWord === word.id }">
+                    {{word.ua}}
+                </li>
+            </ul>
+        </div>
+        <div class="column">
+            <ul>
+                <li v-for="(word,index) in words" :key="word.id" @click="selectEnWord(index)" :class="{ selected: selectedEnWord === word.id, incorrect: incorrectPair && selectedEnWord === word.id }">
+                    {{word.en}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                selectedUaWord: null,
+                selectedEnWord: null,
+                incorrectPair: false,
+                words: [
+                    { id: 0, en: 'table', ua: 'Стіл' },
+                    { id: 1, en: 'chair', ua: 'Стілець' },
+                    { id: 2, en: 'window', ua: 'Вікно' },
+                    { id: 3, en: 'door', ua: 'Двері' },
+                    { id: 4, en: 'book', ua: 'Книга' },
+                    { id: 5, en: 'pen', ua: 'Ручка' },
+                    { id: 6, en: 'apple', ua: 'Яблуко' },
+                    { id: 7, en: 'water', ua: 'Вода' },
+                    { id: 8, en: 'sun', ua: 'Сонце' },
+                    { id: 9, en: 'moon', ua: 'Місяць' }
+                ]
+            }
+        },
+        methods: {
+            selectUaWord(index) {
+                this.selectedUaWord = this.words[index].id
+                this.checkWords()
+            },
+            selectEnWord(index) {
+                this.selectedEnWord = this.words[index].id
+                this.checkWords()
+            },
+            checkWords() {
+                if (this.selectedUaWord !== null && this.selectedEnWord !== null) {
+                    if (this.selectedUaWord === this.selectedEnWord) {
+                        this.words = this.words.filter(word => word.id !== this.selectedUaWord);
+                        this.resetSelection();
+                    } else {
+                        this.incorrectPair = true;
+                        setTimeout(() => {
+                            this.resetSelection();
+                        }, 1000);
+                    }
+                }
+            },
+            resetSelection() {
+                this.selectedUaWord = null;
+                this.selectedEnWord = null;
+                this.incorrectPair = false;
+            }
+        },
+    }).mount("#app")
+</script>
+
+</html>

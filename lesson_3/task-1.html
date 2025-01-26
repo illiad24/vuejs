@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .column {
+            padding: 23px;
+            border: 1px solid blue;
+            margin-bottom: 24px;
+        }
+
+        .column li {
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+
+        .button {
+            padding: 16px;
+            max-width: 200px;
+            margin: 0 auto;
+            background-color: green;
+            color: #fff;
+            text-align: center;
+        }
+
+        .disabled {
+            background-color: grey;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>
+        Задача 6. Пари для танців. Поступово вибираємо хлопця, дівчину і додаємо у обрані пари.
+        Пару можна видалити. Поки не вибрано хлопця і дівчину кнопка «Додати» заблокована.
+        Якщо не вистачає хлопців або дівчат вибір також блокується.
+
+    </h4>
+    <div id="app">
+        <div class="columns">
+            <div class="column">
+                <template v-if="boys.length">
+                    <div>Хлопці</div>
+                    <ul>
+                        <li v-for="(boy,index) in boys" :key="index" @click="selectBoy(boy,index)">{{boy}}</li>
+                    </ul>
+                </template>
+                <template v-else>
+                    Не має наявних хлопців
+                </template>
+            </div>
+
+            <div class="column">
+                <template v-if="girls.length">
+                    <div>Дівчата</div>
+                    <ul>
+                        <li v-for="(girl,index) in girls" :key="index" @click="selectGirl(girl,index)">{{girl}}</li>
+                    </ul>
+                </template>
+                <template v-else>
+                    Не має наявних дівчат
+                </template>
+            </div>
+        </div>
+        <div class="button" @click="addCouple" :class="{disabled:!canAddCouple}" :disabled="!canAddCouple">Додати пару</div>
+
+
+        <div v-show="couples.length" class="couples">
+            <h2>Вибрані пари</h2>
+            <ul>
+                <li v-for="(couple,index) in couples">
+                    <span> {{couple.boy}} - {{couple.girl}}</span> <button @click="deleteCouple(index)">Видалити пару</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                    boys: ['Ivan', 'Petro', 'Max', 'Illia', 'Den'],
+                    girls: ['Olga', 'Oksana', 'Vika', 'Sasha', 'Inna', 'Katia'],
+                    couples: [{ boy: 'Ivan', girl: 'Olga' }],
+                    selectedBoy: null,
+                    selectedGirl: null,
+                }
+            },
+            methods: {
+                selectBoy(boy, index) {
+                    this.selectedBoy = { name: this.boys[index], index: index }
+                },
+                selectGirl(boy, index) {
+                    this.selectedGirl = { name: this.girls[index], index: index }
+                },
+                addCouple() {
+                    if (this.selectedBoy && this.selectedGirl) {
+                        this.couples.push({ boy: this.selectedBoy.name, girl: this.selectedGirl.name })
+                        this.boys.splice(this.selectedBoy.index, 1)
+                        this.girls.splice(this.selectedGirl.index, 1)
+                        this.selectedBoy = null,
+                            this.selectedGirl = null
+                    }
+                },
+                deleteCouple(index) {
+                    this.boys.push(this.couples[index].boy)
+                    this.girls.push(this.couples[index].girl)
+                    this.couples.splice(index, 1)[0];
+                }
+            },
+            computed: {
+                canAddCouple() {
+                    return this.selectedBoy && this.selectedGirl && this.boys.length && this.girls.length;
+                }
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
