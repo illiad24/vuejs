@@ -22,27 +22,22 @@ const store = createStore({
             return state.carsData.filter(car => {
                 const { transportType, bodyTypes, brand, model, year } = state.filterObj;
 
-                // Фільтр за типом транспорту
                 if (transportType && car.transportType !== transportType) {
                     return false;
                 }
 
-                // Фільтр за типом кузова (якщо хоча б один вибраний, авто має відповідати хоча б одному)
                 if (bodyTypes.length && !bodyTypes.includes(car.bodyType)) {
                     return false;
                 }
 
-                // Фільтр за маркою
                 if (brand && car.brand !== brand) {
                     return false;
                 }
 
-                // Фільтр за моделлю
                 if (model && car.model !== model) {
                     return false;
                 }
 
-                // Фільтр за роком випуску
                 if (year.from && car.year < year.from) {
                     return false;
                 }
