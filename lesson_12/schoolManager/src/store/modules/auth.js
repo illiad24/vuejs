@@ -17,12 +17,7 @@ export default {
         exit(state) {
             state.userData = null
             localStorage.removeItem('user')
-            location.reload();
-
-            // !Не можу зрозуміти чому не працює цей перехід
-            // this.$router.push({
-            //     path: '/',
-            // })
+    
         }
     },
     actions: {
