@@ -37,6 +37,9 @@ export default {
     ...mapActions('auth', ['exit']),
     onExit() {
       this.exit()
+this.$router.push({
+        path: '/',
+      })
     },
   },
   computed: {
