@@ -1,0 +1,1 @@
+import{_ as l,b as n,a as e,o}from"./index-D0ORCJnt.js";const r={name:"FilterComp"};function a(s,t,i,p,u,d){return o(),n("div",null,t[0]||(t[0]=[e("h2",null,"Фільтри",-1),e("form",null,[e("div",null,[e("div",null,[e("label",{for:""},"Назва товару")]),e("div",null,[e("input",{type:"text",name:"",id:""})])])],-1)]))}const m=l(r,[["render",a]]);export{m as default};
