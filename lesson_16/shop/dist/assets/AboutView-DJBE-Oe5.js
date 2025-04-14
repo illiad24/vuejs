@@ -1,0 +1,1 @@
+import{_ as n,c as a,w as s,r,o as c,a as e}from"./index-BrnFJBwU.js";const l={};function _(i,o){const t=r("main-layout");return c(),a(t,null,{default:s(()=>o[0]||(o[0]=[e("div",{class:"container"},[e("h1",null,"Сторінка про нас")],-1)])),_:1})}const f=n(l,[["render",_]]);export{f as default};

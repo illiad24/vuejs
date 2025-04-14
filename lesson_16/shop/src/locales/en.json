@@ -1,0 +1,15 @@
+{
+    "menu": {
+        "home": "Home page",
+        "products": "Products",
+        "contacts": "Contacts page"
+    },
+    "actionTitles": {
+        "login": "Login",
+        "logout": "Logout",
+        "addTask": "Add task"
+    },
+    "footer": {
+        "main": "footer"
+    }
+}

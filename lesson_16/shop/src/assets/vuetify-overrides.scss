@@ -1,0 +1,7 @@
+// ⛔️ Вимикаємо reset
+$reset: false;
+
+// ✅ Підключаємо змінні, інструменти, компоненти вручну
+@use "vuetify/settings" with (
+    $reset: $reset
+);

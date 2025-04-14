@@ -1,0 +1,14 @@
+@import './theme.css';
+@import './base.css';
+
+
+@import './utilities.css';
+
+@import "tailwindcss";
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
